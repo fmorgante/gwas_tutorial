@@ -1,6 +1,6 @@
 ---
 title: "GWAS tutorial"
-author: "Fabio Morgante"
+author: "Fabio Morgante & Alex Alekseyenko"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: 
   workflowr::wflow_html:
@@ -11,17 +11,17 @@ editor_options:
 
 This tutorial is adapted from https://whussain2.github.io/Materials/Teaching/GWAS_R_2.html.
 
-##Description of the data
+## Description of the data
 
 For this tutorial, we will use rice data that can be dowloaded [here](http://ricediversity.org/data/sets/44kgwas/).
 These data include genotypes at ~44K SNPs and 36 phenotypes for 413 accessions of *Oryza sativa*. More details
 about these data can be found in this [paper](https://www.nature.com/articles/ncomms1467).
 
-##Load libraies needed
+## Load libraies needed
 
 First, we will load the necessary R packages, BGLR, SNPRelate, dplyr, rrBLUP, and qqman.
 
-```{r load libraries, warning=FALSE}
+```{r load libraries, warning=FALSE, message=FALSE}
 library(BGLR)
 library(SNPRelate)
 library(dplyr)
@@ -29,7 +29,7 @@ library(rrBLUP)
 library(qqman)
 ```
 
-##Prepare genotype and phenotype data
+## Prepare genotype and phenotype data
 
 The genotype data are included in three files with extension .fam (which includes information about the samples),
 .map (which contains information about the SNPs, such as chromosome and position), .ped (which contains the genotype
@@ -99,7 +99,7 @@ MAP <- MAP[-to_remove, ]
 dim(geno_mat)
 ```
 
-##Investigation of population structure
+## Investigation of population structure
 
 These accessions come from different populations. The presence of population structure can induce false positives, so
 we need to investigate this. To do so, we will build a genomic relationship matrix (GRM) that measures the similarity 
@@ -159,7 +159,7 @@ legend(x = "topright", legend = levels(factor(eig_vectors_info$Sub.population)),
        pch = 1, cex = 0.6)
 ```
 
-##Genome-Wide Association Study
+## Genome-Wide Association Study
 
 We will now perform a GWAS for our trait of interest using a linear mixed model that models the covariance between accessions
 (our random effect) using the GRM. That way, we correct for population structure.
