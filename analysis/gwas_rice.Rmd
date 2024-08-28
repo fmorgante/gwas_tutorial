@@ -17,7 +17,7 @@ For this tutorial, we will use rice data that can be dowloaded [here](http://ric
 These data include genotypes at ~44K SNPs and 36 phenotypes for 413 accessions of *Oryza sativa*. More details
 about these data can be found in this [paper](https://www.nature.com/articles/ncomms1467).
 
-## Load libraies needed
+## Load libraries needed
 
 First, we will load the necessary R packages, BGLR, SNPRelate, dplyr, rrBLUP, and qqman.
 
