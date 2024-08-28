@@ -1,0 +1,218 @@
+---
+title: "GWAS tutorial"
+author: "Fabio Morgante"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: 
+  workflowr::wflow_html:
+    toc: true
+editor_options:
+  chunk_output_type: console
+---
+
+This tutorial is adapted from https://whussain2.github.io/Materials/Teaching/GWAS_R_2.html.
+
+##Description of the data
+
+For this tutorial, we will use rice data that can be dowloaded [here](http://ricediversity.org/data/sets/44kgwas/).
+These data include genotypes at ~44K SNPs and 36 phenotypes for 413 accessions of *Oryza sativa*. More details
+about these data can be found in this [paper](https://www.nature.com/articles/ncomms1467).
+
+##Load libraies needed
+
+First, we will load the necessary R packages, BGLR, SNPRelate, dplyr, rrBLUP, and qqman.
+
+```{r load libraries, warning=FALSE}
+library(BGLR)
+library(SNPRelate)
+library(dplyr)
+library(rrBLUP)
+library(qqman)
+```
+
+##Prepare genotype and phenotype data
+
+The genotype data are included in three files with extension .fam (which includes information about the samples),
+.map (which contains information about the SNPs, such as chromosome and position), .ped (which contains the genotype
+calls, where 0 and 3 mean homozygous for either allele, 1 means heterozygous, and 2 means missing). For our purpose,
+we will recode missing geneotype as NA and heterozygous genotypes as 1.
+
+```{r load geno}
+###Load genotype file
+geno <- read_ped("data/sativas413.ped")
+FAM <- read.table("data/sativas413.fam", header=FALSE, sep=" ")
+MAP <- read.table("data/sativas413.map", header=FALSE, sep="\t")
+
+p <- geno$p
+n <- geno$n
+
+###Access genotype matrix
+geno_vec <- geno$x
+
+###Recode genotypes
+geno_vec[geno_vec == 2] <- NA  # Converting missing data to NA
+geno_vec[geno_vec == 3] <- 2  # Converting 3 to 2
+
+###Convert the genotype data into matrix, transpose and check dimensions
+geno_mat <- matrix(geno_vec, nrow = p, ncol = n, byrow = TRUE)
+geno_mat <- t(geno_mat)
+dim(geno_mat)
+colnames(geno_mat) <- MAP$V2
+rownames(geno_mat) <- FAM$V2
+
+dim(geno_mat)
+
+geno_mat[1:5, 1:5]
+```
+
+From the phenotype data, we selected Flowering.time.at.Aberdeen as our trait of interest. Note that NSFTVID is the ID
+of the accession and missing value are coded as NA. Accessions with missing phenotype are removed.
+
+```{r load pheno}
+###Load phenotype data
+rice_pheno <- read.table("data/RiceDiversity_44K_Phenotypes_34traits_PLINK.txt", 
+                         header = TRUE, stringsAsFactors = FALSE, sep = "\t")
+
+###Extract phenotype and remove missing values
+y <- rice_pheno$Flowering.time.at.Aberdeen
+index <- !is.na(y)
+y <- data.frame(NSFTV.ID = rice_pheno$NSFTVID[index], y = y[index])
+
+dim(y)
+
+head(y)
+```
+
+Let's now do some QC on the genotype data. This includes removing accessions with missing phenotype, computing minor allele
+frequency (MAF) for each SNP, and removing SNPs with MAF smaller than 0.05.
+
+```{r QC geno}
+###Remove accessions with missing pheno
+geno_mat <- geno_mat[index, ]
+
+###Filter out variants with small MAF
+af <- colMeans(geno_mat, na.rm = TRUE)/2
+maf <- pmin(af, 1-af)
+to_remove <- which(maf < 0.05)
+geno_mat <- geno_mat[, -to_remove]
+MAP <- MAP[-to_remove, ]
+
+dim(geno_mat)
+```
+
+##Investigation of population structure
+
+These accessions come from different populations. The presence of population structure can induce false positives, so
+we need to investigate this. To do so, we will build a genomic relationship matrix (GRM) that measures the similarity 
+between accessions based genotypes. The higher the coefficient of genomic relationship, the more similar two accessions
+are.
+
+```{r GRM}
+###Create gds format file and save it as 44k.gds
+snpgdsCreateGeno("data/44k.gds", genmat = geno_mat, sample.id = rownames(geno_mat), snp.id = colnames(geno_mat), 
+                 snp.chromosome = MAP$V1, snp.position = MAP$V4, snpfirstdim = FALSE)
+# Now open the 44k.gds file
+geno_44k <- snpgdsOpen("data/44k.gds")
+snpgdsSummary("data/44k.gds")
+
+###Compute GRM
+grm_obj <- snpgdsGRM(geno_44k, method="GCTA")
+
+GRM <- grm_obj$grm
+colnames(GRM) <- rownames(GRM) <- grm_obj$sample.id
+
+dim(GRM)
+
+GRM[1:5, 1:5]
+```
+
+We will perform principal component analysis (PCA) via eigen decomposition of the GRM, to determine whether population
+structure is actually present.
+
+```{r GRM PCA 1}
+###Perform eigen decomposition
+eig <- eigen(GRM)
+
+eig_vectors <- eig$vectors
+colnames(eig_vectors) <- paste0("EV", 1:ncol(eig_vectors))
+eig_vectors_df <- data.frame(NSFTV.ID = grm_obj$sample.id, eig_vectors)
+
+###Plot PC1 vs PC2 and label points according to the pop they belong to
+plot(eig_vectors_df$EV1, eig_vectors_df$EV2, xlab = "PC1", ylab = "PC2")
+```
+
+From the plot of PC1 vs PC2, we can see that there is indeed population structure, with groups of accessions being
+closer to each other than to the rest. This becomes even more clear when we overlay information about the population
+that each accession comes from.
+
+```{r GRM PCA 2}
+###Add population info from the web to PC data
+pop_info <- read.csv("data/RiceDiversity.44K.germplasm.csv", 
+                     header = TRUE, skip = 1, stringsAsFactors = FALSE)
+pop_info <- pop_info[, c("NSFTV.ID", "Sub.population")]
+pop_info$NSFTV.ID <- as.character(pop_info$NSFTV.ID)
+
+eig_vectors_info <- left_join(eig_vectors_df, pop_info, by="NSFTV.ID")
+
+###Plot PC1 vs PC2 and label points according to the pop they belong to
+plot(eig_vectors_info$EV1, eig_vectors_info$EV2, xlab = "PC1", ylab = "PC2", col = c(1:6)[factor(eig_vectors_info$Sub.population)])
+legend(x = "topright", legend = levels(factor(eig_vectors_info$Sub.population)), col = c(1:6), 
+       pch = 1, cex = 0.6)
+```
+
+##Genome-Wide Association Study
+
+We will now perform a GWAS for our trait of interest using a linear mixed model that models the covariance between accessions
+(our random effect) using the GRM. That way, we correct for population structure.
+
+```{r GWAS LMM}
+###Make the GRM positive semi-definite
+eig_values <- eig$values
+eig_values[eig_values<0] <- 0
+GRM_SPD <- eig_vectors %*% diag(eig_values) %*% t(eig_vectors)
+
+###Prepare genotype data in the format expected by rrBLUP
+geno_final <- data.frame(marker = MAP[, 2], chrom = MAP[, 1], pos = MAP[, 4], 
+                         t(geno_mat - 1), check.names = FALSE)  # W = \in{-1, 0, 1}
+
+###Perform GWAS via linear mixed model
+results <- GWAS(pheno=y, geno=geno_final, K=GRM_SPD, min.MAF=0, P3D = TRUE, plot = FALSE)
+results$p_value <- 10^(-results$y)
+```
+
+The results are displayed as a Q-Q plot, where the observed p-values are plotted against the expected p-values under the null 
+hypothesis of no association between the SNP and the phenotype.
+
+```{r QQ LMM}
+###Make qqplot
+qq(results$p_value)
+```
+
+This plot looks pretty good -- large observed p-values are well aligned to their expectation under the null, while smaller
+p-valuesshow a deviation from their expectation under the null, hinting at discovering true signals. We then display the 
+final results as a manhattan plot, where the significance line reflects a Bonferroni correction.
+
+```{r man LMM}
+###Make qqplot
+manhattan(results, chr="chrom", bp="pos", p="p_value", snp = "marker", 
+          genomewideline = -log10(0.05/nrow(geno_final)), suggestiveline=FALSE)
+```
+
+It looks like there is a strong association signal on chromosome 6, and a weaker one on chromosome 1.
+
+As an exercise, what if we had done GWAS with a regular linear model disregarding population structure?
+
+```{r GWAS LM}
+###Perform GWAS via simple linear regression
+results$p_value_lm <- as.numeric(NA)
+
+# This is slow code that is only useful for the teaching purpose 
+for(i in 1:nrow(geno_final)){
+  fit <- lm(y$y ~ as.numeric(geno_final[i, 4:ncol(geno_final)]))
+  results[i, "p_value_lm"] <- summary(fit)$coefficients[2,4]
+}
+
+qq(results$p_value_lm)
+```
+
+The Q-Q plot looks pretty bad now, with clear signs of uncorrected confounding.
+
