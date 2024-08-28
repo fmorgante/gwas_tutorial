@@ -533,15 +533,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomfmorgantegwastutorialtree94943d942020fd91ce8867b4495620cc742377e8targetblank94943d9a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomfmorgantegwastutorialtreea93090d83be845734376ff58d1bda87b90bbf01etargetblanka93090da">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/fmorgante/gwas_tutorial/tree/94943d942020fd91ce8867b4495620cc742377e8" target="_blank">94943d9</a>
+<a href="https://github.com/fmorgante/gwas_tutorial/tree/a93090d83be845734376ff58d1bda87b90bbf01e" target="_blank">a93090d</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomfmorgantegwastutorialtree94943d942020fd91ce8867b4495620cc742377e8targetblank94943d9a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomfmorgantegwastutorialtreea93090d83be845734376ff58d1bda87b90bbf01etargetblanka93090da"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -551,7 +551,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/fmorgante/gwas_tutorial/tree/94943d942020fd91ce8867b4495620cc742377e8" target="_blank">94943d9</a>.
+<a href="https://github.com/fmorgante/gwas_tutorial/tree/a93090d83be845734376ff58d1bda87b90bbf01e" target="_blank">a93090d</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -628,6 +628,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/fmorgante/gwas_tutorial/blob/a93090d83be845734376ff58d1bda87b90bbf01e/analysis/gwas_rice.Rmd" target="_blank">a93090d</a>
+</td>
+<td>
+fmorgante
+</td>
+<td>
+2024-08-28
+</td>
+<td>
+Fix typo
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/fmorgante/gwas_tutorial/5203b325a6c7c4c31919245482dc0c1940dcc5c4/docs/gwas_rice.html" target="_blank">5203b32</a>
+</td>
+<td>
+fmorgante
+</td>
+<td>
+2024-08-28
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/fmorgante/gwas_tutorial/blob/94943d942020fd91ce8867b4495620cc742377e8/analysis/gwas_rice.Rmd" target="_blank">94943d9</a>
 </td>
 <td>
@@ -692,8 +726,8 @@ include genotypes at ~44K SNPs and 36 phenotypes for 413 accessions of
 <em>Oryza sativa</em>. More details about these data can be found in
 this <a href="https://www.nature.com/articles/ncomms1467">paper</a>.</p>
 </div>
-<div id="load-libraies-needed" class="section level2">
-<h2>Load libraies needed</h2>
+<div id="load-libraries-needed" class="section level2">
+<h2>Load libraries needed</h2>
 <p>First, we will load the necessary R packages, BGLR, SNPRelate, dplyr,
 rrBLUP, and qqman.</p>
 <pre class="r"><code>library(BGLR)
@@ -810,9 +844,9 @@ Excluding 0 SNP (monomorphic: TRUE, MAF: NaN, missing rate: NaN)
     using 1 thread
 GRM Calculation:    the sum of all selected genotypes (0,1,2) = 7149883
 CPU capabilities:
-Wed Aug 28 10:49:32 2024    (internal increment: 1368)
+Wed Aug 28 10:52:26 2024    (internal increment: 1368)
 [..................................................]  0%, ETC: ---        [==================================================] 100%, completed, 2s
-Wed Aug 28 10:49:34 2024    Done.</code></pre>
+Wed Aug 28 10:52:28 2024    Done.</code></pre>
 <pre class="r"><code>GRM &lt;- grm_obj$grm
 colnames(GRM) &lt;- rownames(GRM) &lt;- grm_obj$sample.id
 
