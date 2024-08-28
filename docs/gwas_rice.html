@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Fabio Morgante" />
+<meta name="author" content="Fabio Morgante &amp; Alex Alekseyenko" />
 
 <meta name="date" content="2024-08-28" />
 
@@ -372,7 +372,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">GWAS tutorial</h1>
-<h4 class="author">Fabio Morgante</h4>
+<h4 class="author">Fabio Morgante &amp; Alex Alekseyenko</h4>
 <h4 class="date">August 28, 2024</h4>
 
 </div>
@@ -533,15 +533,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomfmorgantegwastutorialtreef985e97cdbf0a2cff2cea70ed2b35168fcb10795targetblankf985e97a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomfmorgantegwastutorialtree94943d942020fd91ce8867b4495620cc742377e8targetblank94943d9a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/fmorgante/gwas_tutorial/tree/f985e97cdbf0a2cff2cea70ed2b35168fcb10795" target="_blank">f985e97</a>
+<a href="https://github.com/fmorgante/gwas_tutorial/tree/94943d942020fd91ce8867b4495620cc742377e8" target="_blank">94943d9</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomfmorgantegwastutorialtreef985e97cdbf0a2cff2cea70ed2b35168fcb10795targetblankf985e97a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomfmorgantegwastutorialtree94943d942020fd91ce8867b4495620cc742377e8targetblank94943d9a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -551,7 +551,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/fmorgante/gwas_tutorial/tree/f985e97cdbf0a2cff2cea70ed2b35168fcb10795" target="_blank">f985e97</a>.
+<a href="https://github.com/fmorgante/gwas_tutorial/tree/94943d942020fd91ce8867b4495620cc742377e8" target="_blank">94943d9</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -568,15 +568,15 @@ were generated:
 Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
-
-Untracked files:
-    Untracked:  data/RiceDiversity.44K.germplasm.csv
-    Untracked:  data/RiceDiversity_44K_Phenotypes_34traits_PLINK.txt
-    Untracked:  data/sativas413.fam
-    Untracked:  data/sativas413.map
-    Untracked:  data/sativas413.ped
+    Ignored:    data/.DS_Store
+    Ignored:    data/RiceDiversity.44K.germplasm.csv
+    Ignored:    data/RiceDiversity_44K_Phenotypes_34traits_PLINK.txt
+    Ignored:    data/sativas413.fam
+    Ignored:    data/sativas413.map
+    Ignored:    data/sativas413.ped
 
 Unstaged changes:
+    Modified:   .gitignore
     Modified:   analysis/_site.yml
 
 </code></pre>
@@ -628,6 +628,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/fmorgante/gwas_tutorial/blob/94943d942020fd91ce8867b4495620cc742377e8/analysis/gwas_rice.Rmd" target="_blank">94943d9</a>
+</td>
+<td>
+fmorgante
+</td>
+<td>
+2024-08-28
+</td>
+<td>
+Minor edits
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/fmorgante/gwas_tutorial/d51066270c60de1d28c4a2fde7df6e14275aea22/docs/gwas_rice.html" target="_blank">d510662</a>
+</td>
+<td>
+fmorgante
+</td>
+<td>
+2024-08-28
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/fmorgante/gwas_tutorial/blob/f985e97cdbf0a2cff2cea70ed2b35168fcb10795/analysis/gwas_rice.Rmd" target="_blank">f985e97</a>
 </td>
 <td>
@@ -650,37 +684,26 @@ Add rice tutorial
 <p>This tutorial is adapted from <a
 href="https://whussain2.github.io/Materials/Teaching/GWAS_R_2.html"
 class="uri">https://whussain2.github.io/Materials/Teaching/GWAS_R_2.html</a>.</p>
-<p>##Description of the data</p>
+<div id="description-of-the-data" class="section level2">
+<h2>Description of the data</h2>
 <p>For this tutorial, we will use rice data that can be dowloaded <a
 href="http://ricediversity.org/data/sets/44kgwas/">here</a>. These data
 include genotypes at ~44K SNPs and 36 phenotypes for 413 accessions of
 <em>Oryza sativa</em>. More details about these data can be found in
 this <a href="https://www.nature.com/articles/ncomms1467">paper</a>.</p>
-<p>##Load libraies needed</p>
+</div>
+<div id="load-libraies-needed" class="section level2">
+<h2>Load libraies needed</h2>
 <p>First, we will load the necessary R packages, BGLR, SNPRelate, dplyr,
 rrBLUP, and qqman.</p>
 <pre class="r"><code>library(BGLR)
-library(SNPRelate)</code></pre>
-<pre><code>Loading required package: gdsfmt</code></pre>
-<pre><code>SNPRelate</code></pre>
-<pre class="r"><code>library(dplyr)</code></pre>
-<pre><code>
-Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>The following objects are masked from &#39;package:stats&#39;:
-
-    filter, lag</code></pre>
-<pre><code>The following objects are masked from &#39;package:base&#39;:
-
-    intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>library(rrBLUP)
+library(SNPRelate)
+library(dplyr)
+library(rrBLUP)
 library(qqman)</code></pre>
-<pre><code></code></pre>
-<pre><code>For example usage please run: vignette(&#39;qqman&#39;)</code></pre>
-<pre><code></code></pre>
-<pre><code>Citation appreciated but not required:</code></pre>
-<pre><code>Turner, (2018). qqman: an R package for visualizing GWAS results using Q-Q and manhattan plots. Journal of Open Source Software, 3(25), 731, https://doi.org/10.21105/joss.00731.</code></pre>
-<pre><code></code></pre>
-<p>##Prepare genotype and phenotype data</p>
+</div>
+<div id="prepare-genotype-and-phenotype-data" class="section level2">
+<h2>Prepare genotype and phenotype data</h2>
 <p>The genotype data are included in three files with extension .fam
 (which includes information about the samples), .map (which contains
 information about the SNPs, such as chromosome and position), .ped
@@ -758,7 +781,9 @@ MAP &lt;- MAP[-to_remove, ]
 
 dim(geno_mat)</code></pre>
 <pre><code>[1]   359 33572</code></pre>
-<p>##Investigation of population structure</p>
+</div>
+<div id="investigation-of-population-structure" class="section level2">
+<h2>Investigation of population structure</h2>
 <p>These accessions come from different populations. The presence of
 population structure can induce false positives, so we need to
 investigate this. To do so, we will build a genomic relationship matrix
@@ -785,9 +810,9 @@ Excluding 0 SNP (monomorphic: TRUE, MAF: NaN, missing rate: NaN)
     using 1 thread
 GRM Calculation:    the sum of all selected genotypes (0,1,2) = 7149883
 CPU capabilities:
-Wed Aug 28 10:44:50 2024    (internal increment: 1368)
+Wed Aug 28 10:49:32 2024    (internal increment: 1368)
 [..................................................]  0%, ETC: ---        [==================================================] 100%, completed, 2s
-Wed Aug 28 10:44:52 2024    Done.</code></pre>
+Wed Aug 28 10:49:34 2024    Done.</code></pre>
 <pre class="r"><code>GRM &lt;- grm_obj$grm
 colnames(GRM) &lt;- rownames(GRM) &lt;- grm_obj$sample.id
 
@@ -813,6 +838,43 @@ eig_vectors_df &lt;- data.frame(NSFTV.ID = grm_obj$sample.id, eig_vectors)
 ###Plot PC1 vs PC2 and label points according to the pop they belong to
 plot(eig_vectors_df$EV1, eig_vectors_df$EV2, xlab = &quot;PC1&quot;, ylab = &quot;PC2&quot;)</code></pre>
 <p><img src="figure/gwas_rice.Rmd/GRM%20PCA%201-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-GRM-PCA-1-1">
+Past versions of "GRM PCA 1-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-GRM-PCA-1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/fmorgante/gwas_tutorial/blob/d51066270c60de1d28c4a2fde7df6e14275aea22/docs/figure/gwas_rice.Rmd/GRM PCA 1-1.png" target="_blank">d510662</a>
+</td>
+<td>
+fmorgante
+</td>
+<td>
+2024-08-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>From the plot of PC1 vs PC2, we can see that there is indeed
 population structure, with groups of accessions being closer to each
 other than to the rest. This becomes even more clear when we overlay
@@ -830,7 +892,46 @@ plot(eig_vectors_info$EV1, eig_vectors_info$EV2, xlab = &quot;PC1&quot;, ylab = 
 legend(x = &quot;topright&quot;, legend = levels(factor(eig_vectors_info$Sub.population)), col = c(1:6), 
        pch = 1, cex = 0.6)</code></pre>
 <p><img src="figure/gwas_rice.Rmd/GRM%20PCA%202-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>##Genome-Wide Association Study</p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-GRM-PCA-2-1">
+Past versions of "GRM PCA 2-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-GRM-PCA-2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/fmorgante/gwas_tutorial/blob/d51066270c60de1d28c4a2fde7df6e14275aea22/docs/figure/gwas_rice.Rmd/GRM PCA 2-1.png" target="_blank">d510662</a>
+</td>
+<td>
+fmorgante
+</td>
+<td>
+2024-08-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="genome-wide-association-study" class="section level2">
+<h2>Genome-Wide Association Study</h2>
 <p>We will now perform a GWAS for our trait of interest using a linear
 mixed model that models the covariance between accessions (our random
 effect) using the GRM. That way, we correct for population
@@ -855,6 +956,43 @@ no association between the SNP and the phenotype.</p>
 <pre class="r"><code>###Make qqplot
 qq(results$p_value)</code></pre>
 <p><img src="figure/gwas_rice.Rmd/QQ%20LMM-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-QQ-LMM-1">
+Past versions of "QQ LMM-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-QQ-LMM-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/fmorgante/gwas_tutorial/blob/d51066270c60de1d28c4a2fde7df6e14275aea22/docs/figure/gwas_rice.Rmd/QQ LMM-1.png" target="_blank">d510662</a>
+</td>
+<td>
+fmorgante
+</td>
+<td>
+2024-08-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>This plot looks pretty good – large observed p-values are well
 aligned to their expectation under the null, while smaller p-valuesshow
 a deviation from their expectation under the null, hinting at
@@ -865,6 +1003,43 @@ correction.</p>
 manhattan(results, chr=&quot;chrom&quot;, bp=&quot;pos&quot;, p=&quot;p_value&quot;, snp = &quot;marker&quot;, 
           genomewideline = -log10(0.05/nrow(geno_final)), suggestiveline=FALSE)</code></pre>
 <p><img src="figure/gwas_rice.Rmd/man%20LMM-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-man-LMM-1">
+Past versions of "man LMM-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-man-LMM-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/fmorgante/gwas_tutorial/blob/d51066270c60de1d28c4a2fde7df6e14275aea22/docs/figure/gwas_rice.Rmd/man LMM-1.png" target="_blank">d510662</a>
+</td>
+<td>
+fmorgante
+</td>
+<td>
+2024-08-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>It looks like there is a strong association signal on chromosome 6,
 and a weaker one on chromosome 1.</p>
 <p>As an exercise, what if we had done GWAS with a regular linear model
@@ -880,6 +1055,43 @@ for(i in 1:nrow(geno_final)){
 
 qq(results$p_value_lm)</code></pre>
 <p><img src="figure/gwas_rice.Rmd/GWAS%20LM-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-GWAS-LM-1">
+Past versions of "GWAS LM-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-GWAS-LM-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/fmorgante/gwas_tutorial/blob/d51066270c60de1d28c4a2fde7df6e14275aea22/docs/figure/gwas_rice.Rmd/GWAS LM-1.png" target="_blank">d510662</a>
+</td>
+<td>
+fmorgante
+</td>
+<td>
+2024-08-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>The Q-Q plot looks pretty bad now, with clear signs of uncorrected
 confounding.</p>
 <br>
@@ -922,6 +1134,7 @@ loaded via a namespace (and not attached):
 [41] whisker_0.4.1     MASS_7.3-57       ps_1.7.6          promises_1.3.0   
 [45] htmltools_0.5.8.1 httpuv_1.6.15     utf8_1.2.4        stringi_1.8.4    
 [49] truncnorm_1.0-9   cachem_1.1.0     </code></pre>
+</div>
 </div>
 
 
